@@ -1,0 +1,88 @@
+# Node.js / Next.js (frontend)
+node_modules/
+.next/
+out/
+*.env
+*.env.local
+*.env.*.local
+npm-debug.log*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+/.pnp*
+.pnp.*
+.pnp.js
+coverage/
+dist/
+
+# testing
+/coverage
+
+# production
+/build
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# WordPress (backend)
+backend/wp-content/ai1wm-backups/
+backend/wp-content/backups/
+backend/wp-content/cache/
+backend/wp-content/uploads/
+backend/wp-content/upgrade/
+backend/wp-content/upgrade-temp-backup/
+backend/wp-content/w3tc-config/
+backend/wp-content/*.log
+backend/wp-content/*.sql
+backend/wp-content/.htaccess
+backend/wp-content/advanced-cache.php
+backend/wp-content/index.php
+backend/error_log
+
+# Ignore default plugins
+backend/wp-content/plugins/
+# backend/wp-content/plugins/index.php
+# backend/wp-content/plugins/hello.php
+# backend/wp-content/plugins/akismet/
+# backend/wp-content/plugins/query-monitor/
+# backend/wp-content/plugins/wordpress-seo/
+# backend/wp-content/plugins/wp-graphql/
+
+# Allow all other plugins (custom or third-party)
+# !backend/wp-content/plugins/wp-graphql/
+
+# Ignore default themes
+backend/wp-content/themes/twenty*/
+backend/wp-content/themes/index.php
+
+# Allow only custom theme
+!backend/wp-content/themes/helium-headless/
+!backend/wp-config.php
+
+# Docker
+*.log
+docker-compose.override.yml
+mysql-data/
+wordpress-data/
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+*.pem
+*.swp
+*.swo
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.pub
+backend/id_rsa

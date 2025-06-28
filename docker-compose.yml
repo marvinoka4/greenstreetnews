@@ -1,0 +1,83 @@
+services:
+  db:
+    platform: linux/amd64
+    image: mysql:8.0
+    container_name: mysql_greennews
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - wordpress_db_data:/var/lib/mysql
+    networks:
+      - greennews-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 3
+
+  wordpress:
+    platform: linux/amd64
+    build:
+      context: ./backend
+    container_name: wordpress_greennews
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_URL: ${WORDPRESS_URL}
+      WORDPRESS_TITLE: ${WORDPRESS_TITLE}
+      WORDPRESS_ADMIN_USER: ${WORDPRESS_ADMIN_USER}
+      WORDPRESS_ADMIN_PASSWORD: ${WORDPRESS_ADMIN_PASSWORD}
+      WORDPRESS_ADMIN_EMAIL: ${WORDPRESS_ADMIN_EMAIL}
+      WORDPRESS_DEBUG: 0
+      WORDPRESS_CONFIG_EXTRA: |
+        define('FS_METHOD', 'direct');
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend/wp-content:/var/www/html/wp-content
+    networks:
+      - greennews-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 45s
+
+  nextjs:
+    platform: linux/amd64
+    build:
+      context: ./frontend
+      args:
+        BUILD_TARGET: ${NEXTJS_BUILD_TARGET:-dev_runner}
+      target: ${NEXTJS_BUILD_TARGET:-dev_runner}
+    container_name: nextjs_greennews
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      NEXT_PUBLIC_WORDPRESS_URL: http://wordpress:80
+      NEXT_PUBLIC_WORDPRESS_URL_CLIENT: http://localhost:8081
+      NEXTJS_BUILD_TARGET: ${NEXTJS_BUILD_TARGET:-dev_runner}
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    networks:
+      - greennews-net
+volumes:
+  wordpress_db_data: {}
+networks:
+  greennews-net:
+    driver: bridge
