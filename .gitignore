@@ -37,6 +37,7 @@ next-env.d.ts
 backend/wp-content/ai1wm-backups/
 backend/wp-content/backups/
 backend/wp-content/cache/
+backend/wp-content/languages/
 backend/wp-content/uploads/
 backend/wp-content/upgrade/
 backend/wp-content/upgrade-temp-backup/
@@ -45,7 +46,9 @@ backend/wp-content/*.log
 backend/wp-content/*.sql
 backend/wp-content/.htaccess
 backend/wp-content/advanced-cache.php
+backend/wp-content/db.php
 backend/wp-content/index.php
+backend/wp-content/object-cache.php
 backend/error_log
 
 # Ignore default plugins
@@ -65,8 +68,8 @@ backend/wp-content/themes/twenty*/
 backend/wp-content/themes/index.php
 
 # Allow only custom theme
-!backend/wp-content/themes/helium-headless/
-!backend/wp-config.php
+!backend/wp-content/themes/heliumfdn/
+!backend/wp-content/themes/helium-tw/
 
 # Docker
 *.log
